@@ -28,7 +28,7 @@ class BaseLinkerApiOrdersTest extends KernelTestCase
         $orders = $container->get(BaseLinkerApiOrders::class);
 
         // When
-        $ordersDTO = $orders->get(Filters::empty());
+        $ordersDTO = $orders->get(new Filters(Filters\Source::AMAZON));
 
         // Then
 
@@ -41,14 +41,20 @@ class BaseLinkerApiOrdersTest extends KernelTestCase
         // Assert Http Client request
         $this->assertSame('POST', $mockResponse->getRequestMethod());
         $this->assertSame('https://api.com/', $mockResponse->getRequestUrl());
-        $this->assertSame('X-BLToken: base_linker_api_token_test', $mockResponse->getRequestOptions()['headers'][0]);
-        $this->assertSame('method=getOrders', $mockResponse->getRequestOptions()['body']);
+        $this->assertSame(
+            'X-BLToken: base_linker_api_token_test',
+            $mockResponse->getRequestOptions()['headers'][0]
+        );
+        $this->assertSame(
+            'method=getOrders&parameters%5Bfilter_order_source%5D=amazon',
+            $mockResponse->getRequestOptions()['body']
+        );
     }
 
     /** @return array{MockResponse, MockHttpClient} */
     private function prepareHttpClientMock(): array
     {
-        $expectedResponseJson = file_get_contents(__DIR__ . '/../files/get_orders_success_response.json');;
+        $expectedResponseJson = file_get_contents(__DIR__ . '/../files/get_orders_success_response.json');
         $mockResponse = new MockResponse($expectedResponseJson, [
             'http_code' => 200,
             'response_headers' => ['Content-Type: application/json'],
