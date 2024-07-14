@@ -4,6 +4,8 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    base_linker_api_url: '%env(string:BASE_LINKER_API_URL)%'
+    base_linker_api_token: '%env(string:BASE_LINKER_API_TOKEN)%'
 
 services:
     # default configuration for services in *this* file
@@ -22,3 +24,12 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\BaseLinkerSDK\HttpClient:
+        arguments:
+            $baseLinkerApiUrl: '%base_linker_api_url%'
+            $baseLinkerApiToken: '%base_linker_api_token%'
+
+    App\Controller\ApiController:
+        arguments:
+            $orders: '@App\Order\Repository\Api\BaseLinkerApiOrders'
