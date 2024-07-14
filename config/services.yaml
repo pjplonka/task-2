@@ -30,6 +30,6 @@ services:
             $baseLinkerApiUrl: '%base_linker_api_url%'
             $baseLinkerApiToken: '%base_linker_api_token%'
 
-    App\Controller\ApiController:
+    App\Order\Message\GetOrdersHandler:
         arguments:
             $orders: '@App\Order\Repository\Api\BaseLinkerApiOrders'

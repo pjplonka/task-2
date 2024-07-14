@@ -13,7 +13,8 @@ framework:
                     max_retries: 3
                     multiplier: 2
             failed: 'doctrine://default?queue_name=failed'
-            # sync: 'sync://'
+            sync: 'sync://'
+
 
         default_bus: messenger.bus.default
 
@@ -27,3 +28,6 @@ framework:
 
             # Route your messages to the transports
             # 'App\Message\YourMessage': async
+
+            App\Order\Message\GetOrders: sync
+
